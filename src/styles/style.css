@@ -2,4 +2,44 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: rgb(242, 240, 235);
+}
+header {
+  border-bottom: 1px solid gray;
+}
+nav {
+  display: flex;
+  font-size: 22px;
+  color: gray;
+}
+
+nav div {
+  margin-top: 10px;
+  margin-left: 20px;
+  padding: 5px;
+}
+
+nav div.selected {
+  color: black;
+  border-bottom: solid 2px black;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul li {
+  font-size: 22px;
+  padding: 10px;
+  padding-left: 40px;
+
+  border-bottom: 1px solid gray;
+}
+
+ul li.clicked {
+  text-decoration: line-through;
+  color: gray;
 }
