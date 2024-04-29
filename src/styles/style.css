@@ -43,3 +43,7 @@ ul li.clicked {
   text-decoration: line-through;
   color: gray;
 }
+
+li.high {
+  color: red;
+}
