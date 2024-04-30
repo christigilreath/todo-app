@@ -1,9 +1,11 @@
 import { Item } from "./Item.js";
-
+var _ = require("lodash");
 class Group {
   constructor(title, list = []) {
     this.title = title;
     this.list = list;
+    this.id = _.camelCase(this.title);
+    this.selected = false;
   }
 
   updateTitle(newTitle) {
@@ -33,11 +35,9 @@ class Group {
   }
 }
 
+const ALL_GROUP = new Group("All");
+const TODAY_GROUP = new Group("Today");
 const DEFAULT_GROUP = new Group("Default Group");
+DEFAULT_GROUP.selected = true;
 
-DEFAULT_GROUP.addItemToList(DEFAULT_GROUP.createItem("Go Shopping"));
-
-DEFAULT_GROUP.setItemId();
-
-// DEFAULT_GROUP.deleteItemFromList("go shopping");
-console.log(DEFAULT_GROUP);
+export { Group, ALL_GROUP, TODAY_GROUP, DEFAULT_GROUP };

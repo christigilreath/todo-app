@@ -37,6 +37,9 @@ ul li {
   padding-left: 40px;
 
   border-bottom: 1px solid gray;
+
+  display: flex;
+  justify-content: space-between;
 }
 
 ul li.clicked {
@@ -46,4 +49,13 @@ ul li.clicked {
 
 li.high {
   color: red;
+}
+
+li span {
+  width: 100px;
+}
+
+li button {
+  width: 50px;
+  border: none;
 }
