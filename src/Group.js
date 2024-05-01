@@ -11,6 +11,9 @@ class Group {
   updateTitle(newTitle) {
     this.title = newTitle;
   }
+  setSelectedToFalse() {
+    this.selected = false;
+  }
   createItem(name, priority) {
     return new Item(name, priority);
   }

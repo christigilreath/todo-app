@@ -1,8 +1,8 @@
 class Item {
-  constructor(name, priority = "regular") {
+  constructor(name, dueDate, priority = "regular") {
     this.name = name;
     this.id;
-    this.dueDate;
+    this.dueDate = dueDate;
     this.priority = priority;
     this.completed = false;
   }
