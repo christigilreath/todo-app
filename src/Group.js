@@ -6,6 +6,7 @@ class Group {
     this.list = list;
     this.id = _.camelCase(this.title);
     this.selected = false;
+    this.required = false;
   }
 
   updateTitle(newTitle) {
@@ -13,6 +14,9 @@ class Group {
   }
   setSelectedToFalse() {
     this.selected = false;
+  }
+  setRequiredToTrue() {
+    this.required = true;
   }
   createItem(name, priority) {
     return new Item(name, priority);
@@ -41,6 +45,10 @@ class Group {
 const ALL_GROUP = new Group("All");
 const TODAY_GROUP = new Group("Today");
 const DEFAULT_GROUP = new Group("Default Group");
+ALL_GROUP.setRequiredToTrue();
+TODAY_GROUP.setRequiredToTrue();
+DEFAULT_GROUP.setRequiredToTrue();
+
 DEFAULT_GROUP.selected = true;
 
 export { Group, ALL_GROUP, TODAY_GROUP, DEFAULT_GROUP };

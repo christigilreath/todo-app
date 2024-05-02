@@ -2,12 +2,14 @@ function Display() {
   const renderNavMenu = (masterGroupList) => {
     const NAV = document.querySelector("nav");
     while (NAV.hasChildNodes()) {
-      NAV.removeChild(NAV.firstChild);
+      NAV.removeChild(NAV.lastChild);
     }
+    console.log(masterGroupList);
     masterGroupList.forEach((group) => {
       const groupDiv = document.createElement("div");
       groupDiv.textContent = group.title;
       groupDiv.id = group.id;
+
       if (group.selected) {
         groupDiv.classList.add("selected");
         renderGroupListItems(group);
@@ -16,7 +18,15 @@ function Display() {
       }
       const itemCountSpan = document.createElement("span");
       itemCountSpan.textContent = `(${group.list.length})`;
-      groupDiv.append(itemCountSpan);
+      itemCountSpan.classList.add("item-count");
+      if (!group.required) {
+        const deleteGroupBtn = document.createElement("button");
+        deleteGroupBtn.textContent = "X";
+        deleteGroupBtn.classList.add("group-delete-btn");
+        groupDiv.append(itemCountSpan, deleteGroupBtn);
+      } else {
+        groupDiv.append(itemCountSpan);
+      }
       NAV.append(groupDiv);
     });
     const addGroupBtn = document.createElement("div");

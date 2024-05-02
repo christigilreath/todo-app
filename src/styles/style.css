@@ -149,3 +149,6 @@ form button:hover {
 .hide {
   display: none;
 }
+.white-text {
+  color: red;
+}
