@@ -22,6 +22,24 @@ nav div {
   margin-top: 10px;
   margin-left: 20px;
   padding: 5px;
+  position: relative;
+  min-width: 175px;
+}
+
+nav div span {
+  margin-left: 5px;
+}
+nav div button {
+  border: none;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  font-size: 22px;
+}
+
+nav div button:hover {
+  color: white;
+  background-color: gray;
 }
 
 nav div.selected {
@@ -126,6 +144,9 @@ form button:hover {
   display: block;
 } */
 
+.add-group-btn:hover {
+  color: black;
+}
 .add-item-btn {
   height: 50px;
 
@@ -148,7 +169,4 @@ form button:hover {
 
 .hide {
   display: none;
-}
-.white-text {
-  color: red;
 }

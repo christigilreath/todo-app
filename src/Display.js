@@ -32,6 +32,7 @@ function Display() {
     const addGroupBtn = document.createElement("div");
     addGroupBtn.textContent = "+";
     addGroupBtn.id = "addGroupBtn";
+    addGroupBtn.classList.add("add-group-btn");
     NAV.append(addGroupBtn);
   };
 
