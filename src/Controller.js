@@ -175,18 +175,11 @@ function Controller() {
   });
 
   MAIN.addEventListener("click", (e) => {
-    if (e.target.nodeName === "LI") {
-      // grab group
-      console.log(MASTER_GROUP_LIST);
-      console.log(e.target.id);
-      const listItemId = e.target.id;
+    const getCurrentGroup = (target) => {
+      const listItemId = target.id;
+      console.log(listItemId);
       const listItemArray = listItemId.split("-");
       const listItemIndex = listItemArray.pop();
-      // const capital = listItemArray.map((item) => {
-      //   item = item.charAt(0).toUpperCase() + item.substr(1);
-      //   return item;
-      // });
-      // const currentGroupTitle = capital.join(" ");
 
       const currentGroupTitle = listItemArray
         .map((item) => {
@@ -198,6 +191,15 @@ function Controller() {
       const currentGroup = MASTER_GROUP_LIST.find((group) => {
         return group.title === currentGroupTitle;
       });
+      return [currentGroup, listItemIndex];
+    };
+
+    if (e.target.nodeName === "LI") {
+      // grab group
+      console.log(MASTER_GROUP_LIST);
+      console.log(e.target.id);
+
+      const [currentGroup, listItemIndex] = getCurrentGroup(e.target.id);
 
       const listItem = currentGroup.list[listItemIndex];
       listItem.completed
@@ -205,11 +207,20 @@ function Controller() {
         : (listItem.completed = true);
       console.log(MASTER_GROUP_LIST);
       TO_DO_LIST_DISPLAY.renderNavMenu(MASTER_GROUP_LIST);
-      // console.log(listItemIndex);
-      // figureOut which listItem (ID?)
-      // console.log(e.target.id);
-      // edit listItem in group to completed
-      //re render group on screen
+    }
+    if (
+      e.target.nodeName === "BUTTON" &&
+      e.target.id !== "addItemBtn" &&
+      e.target.id !== "submitBtn"
+    ) {
+      const [currentGroup, listItemIndex] = getCurrentGroup(
+        e.target.parentElement
+      );
+
+      currentGroup.deleteItemFromList(listItemIndex);
+      getAllItems();
+      getTodaysItems();
+      TO_DO_LIST_DISPLAY.renderNavMenu(MASTER_GROUP_LIST);
     }
   });
 

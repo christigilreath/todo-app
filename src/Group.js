@@ -31,12 +31,8 @@ class Group {
   addItemToList(item) {
     this.list.push(item);
   }
-  deleteItemFromList(itemName) {
-    const itemToDelete = this.list.findIndex(
-      (element) => (element.name = itemName)
-    );
-
-    this.list.splice(itemToDelete, 1);
+  deleteItemFromList(itemIndex) {
+    this.list.splice(itemIndex, 1);
 
     this.setItemId();
   }
