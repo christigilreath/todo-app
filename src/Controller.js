@@ -34,7 +34,6 @@ function Controller() {
   }
 
   function controlGroupForm(e) {
-    console.log(e.target.id);
     if (e.target.id === "groupFormCloseBtn") {
       MAIN.removeChild(MAIN.lastElementChild);
       ADD_ITEM_BTN.classList.remove("hide");
@@ -43,24 +42,34 @@ function Controller() {
         e.preventDefault();
         MASTER_GROUP_LIST.forEach((group) => group.setSelectedToFalse());
         let groupNameInputValue = e.target.previousElementSibling.value;
+        const formattedGroupTitle = groupNameInputValue
+          .toLowerCase()
+          .split(" ")
+          .map((item) => {
+            item = item.charAt(0).toUpperCase() + item.substr(1);
+            return item;
+          })
+          .join(" ");
+
         let newGroupName = groupNameInputValue
           .toUpperCase()
           .split(" ")
           .join("_");
 
         if (
-          MASTER_GROUP_LIST.some((group) => group.title === groupNameInputValue)
+          MASTER_GROUP_LIST.some((group) => group.title === formattedGroupTitle)
         ) {
           alert("Group already exists");
           e.target.previousElementSibling.value = "";
         } else {
-          [newGroupName] = [new Group(e.target.previousElementSibling.value)];
+          [newGroupName] = [new Group(formattedGroupTitle)];
           newGroupName.selected = true;
           MASTER_GROUP_LIST.push(newGroupName);
           TO_DO_LIST_DISPLAY.renderNavMenu(MASTER_GROUP_LIST);
           MAIN.removeChild(MAIN.lastElementChild);
           ADD_ITEM_BTN.classList.remove("hide");
         }
+        console.log(MASTER_GROUP_LIST);
       }
     }
   }
@@ -100,6 +109,7 @@ function Controller() {
           selectedGroup.addItemToList(
             selectedGroup.createItem(name, formattedDueDate)
           );
+          selectedGroup.setItemId();
 
           getAllItems();
           getTodaysItems();
@@ -161,6 +171,45 @@ function Controller() {
       MASTER_GROUP_LIST.forEach((group) => (group.selected = false));
       clickedGroup.selected = true;
       TO_DO_LIST_DISPLAY.renderNavMenu(MASTER_GROUP_LIST);
+    }
+  });
+
+  MAIN.addEventListener("click", (e) => {
+    if (e.target.nodeName === "LI") {
+      // grab group
+      console.log(MASTER_GROUP_LIST);
+      console.log(e.target.id);
+      const listItemId = e.target.id;
+      const listItemArray = listItemId.split("-");
+      const listItemIndex = listItemArray.pop();
+      // const capital = listItemArray.map((item) => {
+      //   item = item.charAt(0).toUpperCase() + item.substr(1);
+      //   return item;
+      // });
+      // const currentGroupTitle = capital.join(" ");
+
+      const currentGroupTitle = listItemArray
+        .map((item) => {
+          item = item.charAt(0).toUpperCase() + item.substr(1);
+          return item;
+        })
+        .join(" ");
+
+      const currentGroup = MASTER_GROUP_LIST.find((group) => {
+        return group.title === currentGroupTitle;
+      });
+
+      const listItem = currentGroup.list[listItemIndex];
+      listItem.completed
+        ? (listItem.completed = false)
+        : (listItem.completed = true);
+      console.log(MASTER_GROUP_LIST);
+      TO_DO_LIST_DISPLAY.renderNavMenu(MASTER_GROUP_LIST);
+      // console.log(listItemIndex);
+      // figureOut which listItem (ID?)
+      // console.log(e.target.id);
+      // edit listItem in group to completed
+      //re render group on screen
     }
   });
 

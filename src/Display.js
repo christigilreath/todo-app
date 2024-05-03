@@ -7,20 +7,22 @@ function Display() {
     console.log(masterGroupList);
     masterGroupList.forEach((group) => {
       const groupDiv = document.createElement("div");
+      const deleteGroupBtn = document.createElement("button");
       groupDiv.textContent = group.title;
       groupDiv.id = group.id;
 
       if (group.selected) {
         groupDiv.classList.add("selected");
+        deleteGroupBtn.classList.add("selected");
         renderGroupListItems(group);
       } else {
         groupDiv.classList.remove("selected");
+        deleteGroupBtn.classList.remove("selected");
       }
       const itemCountSpan = document.createElement("span");
       itemCountSpan.textContent = `(${group.list.length})`;
       itemCountSpan.classList.add("item-count");
       if (!group.required) {
-        const deleteGroupBtn = document.createElement("button");
         deleteGroupBtn.textContent = "X";
         deleteGroupBtn.classList.add("group-delete-btn");
         groupDiv.append(itemCountSpan, deleteGroupBtn);
