@@ -4,7 +4,7 @@ function Display() {
     while (NAV.hasChildNodes()) {
       NAV.removeChild(NAV.lastChild);
     }
-    console.log(masterGroupList);
+
     masterGroupList.forEach((group) => {
       const groupDiv = document.createElement("div");
       const deleteGroupBtn = document.createElement("button");

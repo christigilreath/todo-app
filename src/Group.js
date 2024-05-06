@@ -1,12 +1,12 @@
 import { Item } from "./Item.js";
 var _ = require("lodash");
 class Group {
-  constructor(title, list = []) {
+  constructor(title, list = [], selected = false, required = false) {
     this.title = title;
     this.list = list;
     this.id = _.camelCase(this.title);
-    this.selected = false;
-    this.required = false;
+    this.selected = selected;
+    this.required = required;
   }
 
   updateTitle(newTitle) {

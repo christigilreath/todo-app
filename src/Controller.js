@@ -4,7 +4,8 @@ import { format } from "date-fns";
 
 function Controller() {
   const TO_DO_LIST_DISPLAY = Display();
-  const MASTER_GROUP_LIST = [ALL_GROUP, TODAY_GROUP, DEFAULT_GROUP];
+  // const MASTER_GROUP_LIST = [ALL_GROUP, TODAY_GROUP, DEFAULT_GROUP];
+  let MASTER_GROUP_LIST = [];
 
   const NAV = document.querySelector("nav");
   const MAIN = document.querySelector("main");
@@ -16,12 +17,13 @@ function Controller() {
     for (let i = 2; i < MASTER_GROUP_LIST.length; i++) {
       allItems = [...allItems, ...MASTER_GROUP_LIST[i].list];
     }
-    ALL_GROUP.list = allItems;
+
+    MASTER_GROUP_LIST[0].list = allItems;
   }
 
   function getTodaysItems() {
-    TODAY_GROUP.list = [];
-    console.log(TODAY_GROUP.list);
+    MASTER_GROUP_LIST[1].list = [];
+
     const currentDate = new Date();
     const stringDate = currentDate.toString();
     const slashedDate = stringDate.replaceAll("-", "/");
@@ -30,7 +32,13 @@ function Controller() {
     let todaysItems = MASTER_GROUP_LIST[0].list.filter((item) => {
       return item.dueDate === todaysDate;
     });
-    TODAY_GROUP.list = [...todaysItems];
+    MASTER_GROUP_LIST[1].list = [...todaysItems];
+  }
+
+  function setStorage() {
+    console.log("storage set");
+    localStorage.setItem("data", JSON.stringify(MASTER_GROUP_LIST));
+    console.log(localStorage);
   }
 
   function controlGroupForm(e) {
@@ -111,20 +119,42 @@ function Controller() {
           );
           selectedGroup.setItemId();
 
-          getAllItems();
+          console.log(getAllItems());
           getTodaysItems();
+          setStorage();
           TO_DO_LIST_DISPLAY.renderNavMenu(MASTER_GROUP_LIST);
           MAIN.removeChild(MAIN.lastElementChild);
           ADD_ITEM_BTN.classList.remove("hide");
-          console.log(MASTER_GROUP_LIST);
         }
 
         // re render screen
         // filter all items and todays items
-        // change priority to high for today's items
+        // change priority to high for over due items
       }
     }
   }
+  window.addEventListener("DOMContentLoaded", () => {
+    const storage = JSON.parse(localStorage.getItem("data"));
+    if (storage) {
+      console.log("fetching from storage");
+      const thisStorageRegroup = storage.map((group) => {
+        return new Group(
+          group.title,
+          group.list,
+          group.selected,
+          group.required
+        );
+      });
+      console.log(thisStorageRegroup);
+      MASTER_GROUP_LIST = [...thisStorageRegroup];
+      console.log(MASTER_GROUP_LIST);
+    } else {
+      console.log("original");
+      MASTER_GROUP_LIST = [ALL_GROUP, TODAY_GROUP, DEFAULT_GROUP];
+    }
+    console.log(MASTER_GROUP_LIST);
+    TO_DO_LIST_DISPLAY.renderNavMenu(MASTER_GROUP_LIST);
+  });
 
   ADD_ITEM_BTN.addEventListener("click", () => {
     ADD_ITEM_BTN.classList.add("hide");
@@ -148,6 +178,7 @@ function Controller() {
       getAllItems();
       getTodaysItems();
       MASTER_GROUP_LIST[2].selected = true;
+      setStorage();
       TO_DO_LIST_DISPLAY.renderNavMenu(MASTER_GROUP_LIST);
     }
     if (e.target.nodeName === "SPAN") {
@@ -170,6 +201,7 @@ function Controller() {
     if (clickedGroup) {
       MASTER_GROUP_LIST.forEach((group) => (group.selected = false));
       clickedGroup.selected = true;
+      setStorage();
       TO_DO_LIST_DISPLAY.renderNavMenu(MASTER_GROUP_LIST);
     }
   });
@@ -177,6 +209,7 @@ function Controller() {
   MAIN.addEventListener("click", (e) => {
     const getCurrentGroup = (target) => {
       const listItemId = target.id;
+      // const listItemId = target;
       console.log(listItemId);
       const listItemArray = listItemId.split("-");
       const listItemIndex = listItemArray.pop();
@@ -199,13 +232,16 @@ function Controller() {
       console.log(MASTER_GROUP_LIST);
       console.log(e.target.id);
 
-      const [currentGroup, listItemIndex] = getCurrentGroup(e.target.id);
+      const [currentGroup, listItemIndex] = getCurrentGroup(e.target);
 
       const listItem = currentGroup.list[listItemIndex];
       listItem.completed
         ? (listItem.completed = false)
         : (listItem.completed = true);
       console.log(MASTER_GROUP_LIST);
+      getAllItems();
+      getTodaysItems();
+      setStorage();
       TO_DO_LIST_DISPLAY.renderNavMenu(MASTER_GROUP_LIST);
     }
     if (
@@ -220,17 +256,10 @@ function Controller() {
       currentGroup.deleteItemFromList(listItemIndex);
       getAllItems();
       getTodaysItems();
+      setStorage();
       TO_DO_LIST_DISPLAY.renderNavMenu(MASTER_GROUP_LIST);
     }
   });
-
-  DEFAULT_GROUP.addItemToList(DEFAULT_GROUP.createItem("Go Shopping"));
-  DEFAULT_GROUP.addItemToList(DEFAULT_GROUP.createItem("Clean House"));
-  DEFAULT_GROUP.addItemToList(DEFAULT_GROUP.createItem("Make Dinner"));
-  TODAY_GROUP.addItemToList(TODAY_GROUP.createItem("Do this today"));
-  getAllItems();
-
-  TO_DO_LIST_DISPLAY.renderNavMenu(MASTER_GROUP_LIST);
 }
 
 export { Controller };
